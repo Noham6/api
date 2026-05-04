@@ -99,11 +99,12 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Espèce <span class="text-danger">*</span></label>
-                    <select name="espece" class="form-select rounded-3" required>
-                        @foreach(['Chien', 'Chat', 'Lapin', 'Oiseau', 'Autre'] as $espece)
-                            <option value="{{ $espece }}"
-                                {{ old('espece', $animal->espece ?? '') === $espece ? 'selected' : '' }}>
-                                {{ $espece }}
+                    <select name="espece_id" class="form-select rounded-3" required>
+                        <option value="">-- Sélectionner --</option>
+                        @foreach($especes as $espece)
+                            <option value="{{ $espece->id }}"
+                                {{ old('espece_id', $animal->espece_id ?? '') == $espece->id ? 'selected' : '' }}>
+                                {{ $espece->libelle }}
                             </option>
                         @endforeach
                     </select>

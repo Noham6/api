@@ -145,7 +145,7 @@ class GPBController extends Controller
     public function getBoxes($id)
     {
         $pension = Pension::findOrFail($id);
-        return response()->json($pension->boxes);
+        return response()->json($pension->boxes()->with('espece')->get());
     }
 
     /**
@@ -170,11 +170,12 @@ class GPBController extends Controller
         $pension = Pension::findOrFail($id);
         $validated = $request->validate([
             'superficie' => 'nullable|numeric|min:0',
+            'espece_id'  => 'nullable|integer|exists:especes,id',
         ]);
 
         $validated['pension_id'] = $pension->id;
         $box = Box::create($validated);
-        return response()->json($box, 201);
+        return response()->json($box->load('espece'), 201);
     }
 
     /**
@@ -199,10 +200,11 @@ class GPBController extends Controller
         $box = Box::findOrFail($id);
         $validated = $request->validate([
             'superficie' => 'nullable|numeric|min:0',
+            'espece_id'  => 'nullable|integer|exists:especes,id',
         ]);
 
         $box->update($validated);
-        return response()->json($box);
+        return response()->json($box->load('espece'));
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Animaux;
+use App\Models\Espece;
 use App\Models\User;
 use App\Models\Pension;
 use App\Models\Box;
@@ -168,14 +169,15 @@ class SiteController extends Controller
 
     public function animalCreate()
     {
-        return view('gap.animal-form', ['animal' => null]);
+        $especes = Espece::orderBy('libelle')->get();
+        return view('gap.animal-form', ['animal' => null, 'especes' => $especes]);
     }
 
     public function animalStore(Request $request)
     {
         $validated = $request->validate([
             'nom'                => 'required|string|max:255',
-            'espece'             => 'required|string|max:255',
+            'espece_id'          => 'required|exists:especes,id',
             'race'               => 'nullable|string|max:255',
             'age'                => 'nullable|integer|min:0',
             'poids'              => 'nullable|numeric|min:0',
@@ -197,8 +199,9 @@ class SiteController extends Controller
 
     public function animalEdit($id)
     {
-        $animal = Animaux::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
-        return view('gap.animal-form', compact('animal'));
+        $animal  = Animaux::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $especes = Espece::orderBy('libelle')->get();
+        return view('gap.animal-form', compact('animal', 'especes'));
     }
 
     public function animalUpdate(Request $request, $id)
@@ -207,7 +210,7 @@ class SiteController extends Controller
 
         $validated = $request->validate([
             'nom'                => 'required|string|max:255',
-            'espece'             => 'required|string|max:255',
+            'espece_id'          => 'required|exists:especes,id',
             'race'               => 'nullable|string|max:255',
             'age'                => 'nullable|integer|min:0',
             'poids'              => 'nullable|numeric|min:0',

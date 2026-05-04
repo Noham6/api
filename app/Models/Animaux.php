@@ -13,9 +13,9 @@ class Animaux extends Model
 
     protected $fillable = [
         'user_id',
+        'espece_id',
         'nom',
         'race',
-        'espece',
         'age',
         'poids',
         'description',
@@ -30,4 +30,14 @@ class Animaux extends Model
         'vermifuge_a_jour'   => 'boolean',
         'poids'              => 'float',
     ];
+
+    public function espece()
+    {
+        return $this->belongsTo(Espece::class, 'espece_id');
+    }
+
+    public function proprietaire()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

@@ -25,6 +25,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /// Espèces ///
     Route::get('/especes', [EspeceController::class, 'index']);
+    Route::post('/especes', [EspeceController::class, 'store']);
+    Route::put('/especes/{id}', [EspeceController::class, 'update']);
+    Route::delete('/especes/{id}', [EspeceController::class, 'destroy']);
 
     /// Animaux ///
     Route::get('/animaux', [AnimalController::class, 'index']);
@@ -32,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/animaux', [AnimalController::class, 'store']);
     Route::put('/animaux/{id}', [AnimalController::class, 'update']);
     Route::delete('/animaux/{id}', [AnimalController::class, 'destroy']);
+    Route::put('/animaux/{id}/proprietaire', [AnimalController::class, 'changeProprietaire']);
 
     /// Factures ///
 
