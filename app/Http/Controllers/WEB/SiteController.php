@@ -122,7 +122,7 @@ class SiteController extends Controller
             'password' => 'required',
         ]);
 
-        // Cherche l'utilisateur par email
+        // Cherche l'utilisateur par email pour vérifier l'email vérifié
         $user = User::where('email', $credentials['email'])->first();
 
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
@@ -139,8 +139,11 @@ class SiteController extends Controller
             return back()->withErrors(['email' => 'Veuillez vérifier votre email avant de vous connecter'])->withInput();
         }
 
-        // Authentifie simplement avec la session
-        Auth::login($user);
+        // Authentification via Auth::attempt
+        if (!Auth::attempt($credentials)) {
+            return back()->withErrors(['email' => 'Identifiants invalides'])->withInput();
+        }
+
         $request->session()->regenerate();
 
         \Log::info('User logged in', ['user_id' => $user->id, 'email' => $user->email]);
