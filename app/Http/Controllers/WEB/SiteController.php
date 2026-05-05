@@ -141,6 +141,7 @@ class SiteController extends Controller
 
         // Authentifie simplement avec la session
         Auth::login($user);
+        $request->session()->regenerate();
 
         \Log::info('User logged in', ['user_id' => $user->id, 'email' => $user->email]);
 
